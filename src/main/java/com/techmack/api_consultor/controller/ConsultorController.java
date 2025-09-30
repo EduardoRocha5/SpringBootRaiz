@@ -41,7 +41,7 @@ public class ConsultorController {
                 <h2>EndPoints Disponiveis: </h2>
                 <ul>
                     <li><a href=" ">Buscar CEP</a></li>
-                    <li><a href=" ">Fatos Gatos</a></li>
+                    <li><a href="fatos-gatos">Fatos Gatos</a></li>
                     <li><a href=" ">Piadas</a></li>
                     <li><a href=" ">Alguma Opção...</a></li>
                 </ul>
@@ -79,11 +79,42 @@ public class ConsultorController {
             String sUrl = "https://viacep.com.br/ws/" + sCep + "/json/";
             String sJsonResposta = fazerRequisicao(sUrl);
 
-            return "";
+            String sLogradouro = extrairValorJson(sJsonResposta, "logradouro");
+            String sBairro = extrairValorJson(sJsonResposta, "bairro");
+            String sLocalidade = extrairValorJson(sJsonResposta, "localidade");
+            String sUf = extrairValorJson(sJsonResposta, "uf");
+
+            return String.format("""
+                       - Consulta de CEP -
+                        Logradouro: %s
+                        Bairro: %s
+                        Localidade: %s
+                        Estado: %s
+                    """, sLogradouro, sBairro, sLocalidade, sUf);
+
         }
 
         catch (Exception erro) {
             return "Aconteceu algum erro:" + erro.getMessage();
+        }
+
+    }
+
+    @GetMapping("/fatos-gatos")
+    public String consultarFatoGato() {
+
+        try {
+            String sUrl = "https://meowfacts.herokuapp.com/?lang=por-br";
+            String sJsonResposta = fazerRequisicao(sUrl);
+
+            String fatos = extrairValorJson(sJsonResposta, "data");
+
+            return String.format("""
+                    fato: %s
+                    """, fatos);
+
+        } catch (Exception e) {
+            return "Aconteceu Algum erro: " + e.getMessage();
         }
 
     }
@@ -93,27 +124,35 @@ public class ConsultorController {
         try {
 
             String sBusca = "\"" + sChave + "\":\"";
+           
             int iInicio = sJson.indexOf(sBusca);
 
             if (iInicio == -1) {
                 sBusca = "\"" + sChave + "\":";
+               
                 iInicio = sJson.indexOf(sBusca);
                 if (iInicio == -1) {
                     return "Campo não Encontrado";
                 }
 
                 iInicio += sBusca.length();
-                int iFim = sJson.indexOf("," + iInicio);
+                int iFim = sJson.indexOf(",", iInicio);
 
                 if (iFim == -1) {
-                    iFim = sJson.indexOf("}" + iInicio);
+                    iInicio = sJson.indexOf("\"data\"") + "\"data\":[".length();
+                    iFim = sJson.indexOf("]", iInicio);
+
+                }
+
+                if (iFim == -1) {
+                    iFim = sJson.indexOf("}", iInicio);
                 }
 
                 return sJson.substring(iInicio, iFim).trim();
             }
 
             iInicio += sBusca.length();
-            int iFim = sJson.indexOf("\"" + iInicio);
+            int iFim = sJson.indexOf("\"", iInicio);
             return sJson.substring(iInicio, iFim).trim();
 
         } catch (Exception erro) {
