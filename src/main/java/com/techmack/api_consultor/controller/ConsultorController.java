@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,20 +34,13 @@ public class ConsultorController {
         contadores.put("piada", 0);
     }
 
-    @GetMapping("/")
-    public String home() {
-        return """
+    @Controller
+    public class HomeController {
 
-                <h1>Consultor APIS - Spring Boot</h1>
-                <h2>EndPoints Disponiveis: </h2>
-                <ul>
-                    <li><a href=" ">Buscar CEP</a></li>
-                    <li><a href="fatos-gatos">Fatos Gatos</a></li>
-                    <li><a href=" ">Piadas</a></li>
-                    <li><a href=" ">Alguma Opção...</a></li>
-                </ul>
-                        """;
-
+        @GetMapping("/")
+        public String home() {
+            return "index"; // Thymeleaf procura em templates/index.html
+        }
     }
 
     // meotodo resoinsavel reutilizado do consultorAPI original
@@ -73,7 +67,7 @@ public class ConsultorController {
     }
 
     @GetMapping("/cep/{cep}")
-    public String consultarCep(@PathVariable String sCep) {
+    public String consultarCep(@PathVariable("cep") String sCep) {
 
         try {
             String sUrl = "https://viacep.com.br/ws/" + sCep + "/json/";
@@ -86,10 +80,10 @@ public class ConsultorController {
 
             return String.format("""
                        - Consulta de CEP -
-                        Logradouro: %s
-                        Bairro: %s
-                        Localidade: %s
-                        Estado: %s
+                        Logradouro: %s\n
+                        Bairro: %s\n
+                        Localidade: %s\n
+                        Estado: %s\n
                     """, sLogradouro, sBairro, sLocalidade, sUf);
 
         }
@@ -107,11 +101,11 @@ public class ConsultorController {
             String sUrl = "https://meowfacts.herokuapp.com/?lang=por-br";
             String sJsonResposta = fazerRequisicao(sUrl);
 
-            String fatos = extrairValorJson(sJsonResposta, "data");
+            String sFatos = extrairValorJson(sJsonResposta, "data");
 
             return String.format("""
                     fato: %s
-                    """, fatos);
+                    """, sFatos);
 
         } catch (Exception e) {
             return "Aconteceu Algum erro: " + e.getMessage();
@@ -124,12 +118,12 @@ public class ConsultorController {
         try {
 
             String sBusca = "\"" + sChave + "\":\"";
-           
+
             int iInicio = sJson.indexOf(sBusca);
 
             if (iInicio == -1) {
                 sBusca = "\"" + sChave + "\":";
-               
+
                 iInicio = sJson.indexOf(sBusca);
                 if (iInicio == -1) {
                     return "Campo não Encontrado";
