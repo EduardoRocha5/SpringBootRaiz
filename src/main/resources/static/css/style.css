@@ -41,16 +41,7 @@ h1{
 
 }
 
-.fatosGatos{  
-
-    font-size: 25px;
-    text-shadow:0px 2px rgb(0, 0, 0, 0.4);
-    justify-content: center;
-    margin-bottom: 20px;
-
-}
-
-.cep{
+.card{  
 
     font-size: 25px;
     text-shadow:0px 2px rgb(0, 0, 0, 0.4);
@@ -60,7 +51,7 @@ h1{
 }
 
 input::placeholder {
-    
+
     font-weight: bold;
     opacity: 0.5;
     width: 60px;  
@@ -69,4 +60,10 @@ input::placeholder {
     margin-bottom: 20px;
     border-radius: 5px;
     
+}
+
+.container {
+max-width: 800px;
+padding: 40px 20px;
+animation: fadeIn 1s ease-in;
 }
