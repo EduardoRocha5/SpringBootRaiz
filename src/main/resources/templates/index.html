@@ -13,12 +13,31 @@
     <h1>Consultor de API</h1>
     </header>
     <div class="card">
-    <p>Fatos-Gatos <button class="btn"> Click Aqui!</button></p>
+    <p>Fatos-Gatos <button onclick="buscarFatoFato()"  class="btn"> Buscar!</button></p>
+    <div id="resultado-gato" class="resultado"></div>
     </div>
     <div class="card">
-    <p>CEP: <input type="text" name="cep" size="5" maxlength="5" placeholder="00000"> - <input type="text" name="cep2" size="3" maxlength="3" placeholder="000"> <button class="btn"> Buscar!</button></p>
+    <p>CEP: <input id="cep-input" type="text" name="cep" maxlength="9" placeholder="Digite..."> <button onclick="buscarCEP()" class="btn"> Buscar!</button></p>
+    <div id="esultado-cep" class="resultado"></div>
     </div>
+    </div>
+    <script>
 
-    </div>
+        async function buscarFatoFato() {
+            
+            const resultado = document.getElementById("resultado-gato");
+            resultado.innerHTML = `<p class="success">Carregando...</p>`
+
+            try {
+                const response = await fetch("/api/fatos-gatos");
+                const texto = await response.text();
+                resultado.innerHTML = `<p>${texto}</p>`;
+            } catch (erro) {
+                resultado.innerHTML = `<p class="error">Erro ao buscar fato: ${erro.message}</p>`;
+            }
+
+        }
+
+    </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 body{
 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(155deg , #8695f5 0%, #9ee5ec 100%);
+    background: linear-gradient(155deg , #828ed8 0%, #3cc993 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -11,8 +11,9 @@ body{
     text-align: center;
 }
 
-h1{
-    font-size: 4rem;
+header{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2rem;
     font-weight: 300;
     margin-bottom: 20px;
     letter-spacing: 2px;
@@ -38,7 +39,16 @@ h1{
     letter-spacing: 2px;
     border-radius: 20px;
     backdrop-filter: blur(10px);
+    cursor: pointer;
 
+}
+
+.btn:hover{
+    transform: translateY(-5px);
+}
+
+.btn:active{
+    transform: translateY(0);
 }
 
 .card{  
@@ -55,11 +65,19 @@ input::placeholder {
     font-weight: bold;
     opacity: 0.5;
     width: 60px;  
-    height: 25px;   
+    height: 55px;   
     justify-content: center;
     margin-bottom: 20px;
     border-radius: 5px;
     
+}
+
+input[type="text"]{
+    flex: 1;
+    padding: 12px 17px;
+    border: 2px solid #f7f3f380;
+    
+
 }
 
 .container {
